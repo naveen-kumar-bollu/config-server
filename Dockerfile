@@ -1,5 +1,5 @@
 # Multi-stage build
-FROM openjdk:21-jdk-slim as build
+FROM openjdk:21-jdk as build
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ COPY src src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:21-jre-slim
+FROM openjdk:21-jre
 
 WORKDIR /app
 
