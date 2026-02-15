@@ -17,13 +17,14 @@ spring:
           host-key-algorithm: ssh-rsa
           strict-host-key-checking: false
 
-# Encryption Configuration
+# Encryption Configuration (optional - only if keystore is provided)
 encrypt:
+  fail-on-error: false  # Don't fail if encryption is not available
   key-store:
-    location: ${KEYSTORE_LOCATION:file:${KEYSTORE_TEMP_PATH:/tmp/server.jks}}
-    password: ${KEYSTORE_PASSWORD:changeit}
+    location: ${KEYSTORE_LOCATION:}
+    password: ${KEYSTORE_PASSWORD:}
     alias: ${KEYSTORE_ALIAS:config-server-key}
-    secret: ${KEYSTORE_PASSWORD:changeit}
+    secret: ${KEYSTORE_PASSWORD:}
 
 # Actuator Configuration
 management:

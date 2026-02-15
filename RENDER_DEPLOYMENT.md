@@ -31,6 +31,8 @@ base64 server.jks > server.jks.base64
 
 Copy the contents of `server.jks.base64` - you'll need this for Render environment variables.
 
+**Note:** If you don't plan to use encryption in your config files, you can skip keystore generation and leave `KEYSTORE_BASE64` unset. However, any `{cipher}` encrypted values in your configuration will not be decrypted.
+
 ## Step 2: Create Web Service in Render
 
 1. Go to [Render Dashboard](https://dashboard.render.com)
@@ -53,10 +55,12 @@ Add the following environment variables in Render:
 |----------|-------|-------|
 | `GIT_URI` | `https://github.com/your-username/config-repo` | Your config repository URL |
 | `GIT_DEFAULT_LABEL` | `main` | Branch name |
-| `KEYSTORE_BASE64` | `<base64-encoded-keystore>` | Paste the Base64 contents from Step 1 |
-| `KEYSTORE_PASSWORD` | `your-keystore-password` | The password you used when creating keystore |
+| `KEYSTORE_BASE64` | `<base64-encoded-keystore>` | **REQUIRED for encryption** - Paste the Base64 contents from Step 1 |
+| `KEYSTORE_PASSWORD` | `your-keystore-password` | **REQUIRED** - The password you used when creating keystore |
 | `KEYSTORE_ALIAS` | `config-server-key` | Alias from keystore generation |
 | `SPRING_PROFILES_ACTIVE` | `prod` | Spring profile to use |
+
+**⚠️ IMPORTANT**: If you skip `KEYSTORE_BASE64`, encryption will be disabled and any `{cipher}` values in your config files will fail to decrypt.
 
 ### Optional Variables
 
@@ -182,6 +186,39 @@ Check logs in Render dashboard. Common issues:
 - Invalid keystore password
 - Unreachable Git repository
 - Out of memory
+
+### "Invalid keystore location" Error
+
+**Error message:**
+```
+java.lang.IllegalStateException: Invalid keystore location
+```
+
+**Causes & Solutions:**
+
+1. **Missing KEYSTORE_BASE64 environment variable**
+   - ✅ Ensure `KEYSTORE_BASE64` is set in Render with the complete Base64-encoded keystore
+   - ✅ Verify there are no extra spaces or line breaks in the Base64 string
+
+2. **Invalid Base64 encoding**
+   - ✅ Re-encode the keystore: `base64 server.jks | tr -d '\n' > server.jks.base64`
+   - ✅ Copy the entire contents without any formatting
+
+3. **Missing KEYSTORE_PASSWORD**
+   - ✅ Verify `KEYSTORE_PASSWORD` matches the password used when creating the keystore
+
+4. **Permission issues**
+   - ✅ The application runs as a non-root user with write access to `/tmp`
+   - ✅ This should work by default in the Dockerfile
+
+**How to verify your keystore locally:**
+```bash
+# Test decode your Base64 keystore
+echo "$KEYSTORE_BASE64" | base64 -d > test-decoded.jks
+
+# Verify it's a valid keystore
+keytool -list -keystore test-decoded.jks -storepass your-password
+```
 
 ### Can't Connect to Config Repository
 
