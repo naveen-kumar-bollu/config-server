@@ -1,0 +1,231 @@
+# API Service Configuration - All profiles in single file
+
+---
+spring:
+  profiles: dev
+  application:
+    name: api-service
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI:http://localhost:8888}
+      fail-fast: true
+      retry:
+        max-attempts: 10
+        initial-interval: 1000
+        max-interval: 2000
+        multiplier: 1.1
+
+# Database Configuration
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      data-source-properties:
+        prepareThreshold: 0
+
+# JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO}
+    show-sql: ${SHOW_SQL}
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+
+# Disable H2 auto-configuration
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+# Server Configuration
+server:
+  port: ${PORT}
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+---
+spring:
+  profiles: release
+  application:
+    name: expensora-api
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: true
+      retry:
+        max-attempts: 10
+        initial-interval: 1000
+        max-interval: 2000
+        multiplier: 1.1
+
+# Database Configuration
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      data-source-properties:
+        prepareThreshold: 0
+
+# JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO}
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: false
+
+# Disable H2 auto-configuration
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+# Server Configuration
+server:
+  port: ${PORT}
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+# Logging for release
+logging:
+  level:
+    com: INFO
+    org.springframework.security: DEBUG
+
+---
+spring:
+  profiles: production
+  application:
+    name: expensora-api
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      fail-fast: true
+      retry:
+        max-attempts: 10
+        initial-interval: 1000
+        max-interval: 2000
+        multiplier: 1.1
+
+# Database Configuration
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      data-source-properties:
+        prepareThreshold: 0
+
+# JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO}
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: false
+
+# Disable H2 auto-configuration
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+# Server Configuration
+server:
+  port: ${PORT}
+  compression:
+    enabled: true
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+
+# Swagger/OpenAPI Configuration (disabled in production)
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Production logging
+logging:
+  level:
+    com: WARN
+    org.springframework: WARN
+    org.hibernate: WARN
+
+# Production security
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never

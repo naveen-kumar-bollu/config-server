@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  config-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - ENCRYPT_KEY=expensora-config-key
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=git@github.com:naveen-kumar-bollu/config-server-repo.git
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL=main
+      - GIT_SSH_COMMAND=ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/config-server-key
+      # Keystore configuration via environment variables
+      - KEYSTORE_LOCATION=file:/app/keystore/server.jks
+      - KEYSTORE_PASSWORD=expensora-config
+      - KEYSTORE_ALIAS=config-server-key
+    volumes:
+      - ~/.ssh/config-server-key:/home/spring/.ssh/config-server-key:ro
+      - ~/.ssh/config-server-key.pub:/home/spring/.ssh/config-server-key.pub:ro
+      - ./keystore:/app/keystore:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+
+  # Optional: Add a test client to verify config server
+  config-client-test:
+    image: curlimages/curl
+    command: >
+      sh -c "
+        echo 'Waiting for config server...' &&
+        sleep 30 &&
+        echo 'Testing config server health...' &&
+        curl -f http://config-server:8888/actuator/health &&
+        echo 'Testing API config retrieval...' &&
+        curl -f http://config-server:8888/expensora-api/dev &&
+        echo 'Config server is working!'
+      "
+    depends_on:
+      config-server:
+        condition: service_healthy

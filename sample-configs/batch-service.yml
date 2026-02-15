@@ -1,0 +1,77 @@
+# Batch Service Configuration - All profiles in single file
+
+---
+spring:
+  profiles: dev
+  application:
+    name: batch-service
+
+batch:
+  job:
+    enabled: true
+  schedule:
+    cron: "0 0/30 * * * ?"  # Every 30 minutes for dev testing
+
+database:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/app_dev
+  username: dev_batch_user
+  password: '{cipher}dev_batch_password_encrypted'
+
+logging:
+  level:
+    com: DEBUG
+
+---
+spring:
+  profiles: release
+  application:
+    name: batch-service
+
+batch:
+  job:
+    enabled: true
+  schedule:
+    cron: "0 0 2 * * ?"  # Daily at 2 AM for release testing
+
+database:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://staging-db-server:3306/app_release
+  username: release_batch_user
+  password: '{cipher}release_batch_password_encrypted'
+
+logging:
+  level:
+    com: INFO
+
+---
+spring:
+  profiles: production
+  application:
+    name: batch-service
+
+batch:
+  job:
+    enabled: true
+  schedule:
+    cron: "0 0 1 * * ?"  # Daily at 1 AM for production
+
+database:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://prod-db-server:3306/app_prod
+  username: prod_batch_user
+  password: '{cipher}prod_batch_password_encrypted'
+
+logging:
+  level:
+    com: WARN
+
+# Production monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never

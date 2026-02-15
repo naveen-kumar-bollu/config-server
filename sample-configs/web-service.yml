@@ -1,0 +1,90 @@
+# Web Service Configuration - All profiles in single file
+
+---
+spring:
+  profiles: dev
+  application:
+    name: web-service
+
+server:
+  port: 3000
+
+app:
+  web:
+    api-base-url: http://localhost:8080/api/v1
+    session-timeout: 1800
+
+auth:
+  google:
+    client-id: '{cipher}dev_google_client_id_encrypted'
+    client-secret: '{cipher}dev_google_client_secret_encrypted'
+
+analytics:
+  google-analytics-id: '{cipher}dev_ga_tracking_id_encrypted'
+
+features:
+  gamification: true
+  reports: true
+  import-export: true
+
+---
+spring:
+  profiles: release
+  application:
+    name: web-service
+
+server:
+  port: 3000
+
+app:
+  web:
+    api-base-url: https://api-staging.example.com/api/v1
+    session-timeout: 1800
+
+auth:
+  google:
+    client-id: '{cipher}release_google_client_id_encrypted'
+    client-secret: '{cipher}release_google_client_secret_encrypted'
+
+analytics:
+  google-analytics-id: '{cipher}release_ga_tracking_id_encrypted'
+
+features:
+  gamification: true
+  reports: true
+  import-export: true
+
+---
+spring:
+  profiles: production
+  application:
+    name: web-service
+
+server:
+  port: 443
+
+app:
+  web:
+    api-base-url: https://api.example.com/api/v1
+    session-timeout: 3600
+
+auth:
+  google:
+    client-id: '{cipher}prod_google_client_id_encrypted'
+    client-secret: '{cipher}prod_google_client_secret_encrypted'
+
+analytics:
+  google-analytics-id: '{cipher}prod_ga_tracking_id_encrypted'
+
+features:
+  gamification: true
+  reports: true
+  import-export: true
+  multi-currency: true
+
+# Production security
+server:
+  ssl:
+    enabled: true
+  compression:
+    enabled: true

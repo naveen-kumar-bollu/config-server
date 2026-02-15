@@ -1,0 +1,14 @@
+target/
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+.mvn/wrapper/maven-wrapper.jar
+node_modules/
+.env
+.env.local
+server.jks
