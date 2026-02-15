@@ -14,6 +14,10 @@ services:
         value: 8888
       - key: GIT_URI
         value: https://github.com/naveen-kumar-bollu/config-server-repo
+      - key: GIT_USERNAME
+        value: naveen-kumar-bollu
+      - key: GIT_PASSWORD
+        sync: false # Set this in Render dashboard as a secret (your PAT token)
       - key: GIT_DEFAULT_LABEL
         value: main
       - key: KEYSTORE_BASE64
