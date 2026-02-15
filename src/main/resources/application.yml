@@ -13,6 +13,8 @@ spring:
           default-label: ${GIT_DEFAULT_LABEL:main}
           clone-on-start: true
           timeout: 10
+          username: ${GIT_USERNAME:}
+          password: ${GIT_PASSWORD:}
           ignore-local-ssh-settings: true
           host-key-algorithm: ssh-rsa
           strict-host-key-checking: false
