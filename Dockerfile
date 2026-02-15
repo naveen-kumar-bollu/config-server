@@ -25,7 +25,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
-RUN addgroup --system spring && adduser --system spring --ingroup spring
+RUN addgroup --system spring && \
+    adduser --system --home /home/spring spring --ingroup spring && \
+    mkdir -p /home/spring && \
+    chown spring:spring /home/spring
 USER spring:spring
 
 # Create .ssh directory and set permissions
