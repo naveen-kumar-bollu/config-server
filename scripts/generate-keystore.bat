@@ -24,9 +24,12 @@ if %ERRORLEVEL% neq 0 (
     )
 )
 
+REM Prompt for keystore password
+set /p KEYSTORE_PASSWORD="Enter keystore password: "
+
 %KEYTOOL% -genkeypair -alias config-server-key -keyalg RSA ^
   -dname "CN=Config Server,OU=Expensora,O=Expensora,L=City,ST=State,C=US" ^
-  -keypass expensora-config -keystore server.jks -storepass expensora-config ^
+  -keypass %KEYSTORE_PASSWORD% -keystore server.jks -storepass %KEYSTORE_PASSWORD% ^
   -storetype JKS
 
 if %ERRORLEVEL% equ 0 (
