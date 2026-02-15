@@ -13,14 +13,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable()) // CSRF can be disabled for stateless APIs
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/encrypt/**").permitAll()
-                .requestMatchers("/decrypt/**").permitAll()
+                // Health endpoint should be public for load balancers and health checks
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                // All other endpoints require authentication
                 .anyRequest().authenticated()
             )
-            .httpBasic(httpBasic -> {});
+            .httpBasic(httpBasic -> {}); // Enable HTTP Basic authentication
 
         return http.build();
     }

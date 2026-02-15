@@ -1,0 +1,27 @@
+# Render.com Configuration for Config Server
+services:
+  - type: web
+    name: config-server
+    runtime: docker
+    region: oregon # Choose your preferred region
+    plan: starter # or free
+    branch: master
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8888
+      - key: GIT_URI
+        value: https://github.com/naveen-kumar-bollu/config-server-repo
+      - key: GIT_DEFAULT_LABEL
+        value: main
+      - key: KEYSTORE_BASE64
+        sync: false # Set this in Render dashboard as a secret
+      - key: KEYSTORE_PASSWORD
+        sync: false # Set this in Render dashboard as a secret
+      - key: KEYSTORE_ALIAS
+        value: config-server-key
+      - key: KEYSTORE_TEMP_PATH
+        value: /tmp/server.jks
+    healthCheckPath: /actuator/health

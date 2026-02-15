@@ -28,7 +28,7 @@ REM Prompt for keystore password
 set /p KEYSTORE_PASSWORD="Enter keystore password: "
 
 %KEYTOOL% -genkeypair -alias config-server-key -keyalg RSA ^
-  -dname "CN=Config Server,OU=Expensora,O=Expensora,L=City,ST=State,C=US" ^
+  -dname "CN=Config Server,OU=IT,O=MyOrg,L=City,ST=State,C=US" ^
   -keypass %KEYSTORE_PASSWORD% -keystore server.jks -storepass %KEYSTORE_PASSWORD% ^
   -storetype JKS
 

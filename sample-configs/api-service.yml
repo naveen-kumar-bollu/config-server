@@ -73,7 +73,7 @@ springdoc:
 spring:
   profiles: release
   application:
-    name: expensora-api
+    name: api-service
   cloud:
     config:
       uri: ${CONFIG_SERVER_URI}
@@ -148,7 +148,7 @@ logging:
 spring:
   profiles: production
   application:
-    name: expensora-api
+    name: api-service
   cloud:
     config:
       uri: ${CONFIG_SERVER_URI}

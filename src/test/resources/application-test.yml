@@ -1,0 +1,20 @@
+# Test Profile Configuration
+spring:
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:./config-repo
+          clone-on-start: false
+          ignore-local-ssh-settings: true
+
+# Disable encryption for tests
+encrypt:
+  key-store:
+    location:
+    password:
+    alias:
+    secret:

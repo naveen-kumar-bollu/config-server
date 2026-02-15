@@ -1,0 +1,64 @@
+# Config Server Configuration
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_URI:https://github.com/naveen-kumar-bollu/config-server-repo}
+          default-label: ${GIT_DEFAULT_LABEL:main}
+          clone-on-start: true
+          timeout: 10
+          ignore-local-ssh-settings: true
+          host-key-algorithm: ssh-rsa
+          strict-host-key-checking: false
+
+# Encryption Configuration
+encrypt:
+  key-store:
+    location: ${KEYSTORE_LOCATION:file:${KEYSTORE_TEMP_PATH:/tmp/server.jks}}
+    password: ${KEYSTORE_PASSWORD:changeit}
+    alias: ${KEYSTORE_ALIAS:config-server-key}
+    secret: ${KEYSTORE_PASSWORD:changeit}
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,encrypt,decrypt
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging
+logging:
+  level:
+    '[org.springframework.cloud.config]': INFO
+    '[org.springframework.security]': INFO
+    '[com.configserver]': DEBUG
+
+---
+# Test Profile Configuration
+spring:
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:./config-repo
+          clone-on-start: false
+          ignore-local-ssh-settings: true
+
+encrypt:
+  key-store:
+    location:
+    password:
+    alias:
+    secret:

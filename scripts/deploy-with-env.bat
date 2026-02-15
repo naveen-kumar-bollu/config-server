@@ -4,12 +4,12 @@ echo ================================
 
 REM Set environment variables for keystore configuration
 set KEYSTORE_LOCATION=file:/app/keystore/server.jks
-set KEYSTORE_PASSWORD=expensora-config
+set KEYSTORE_PASSWORD=your-keystore-password
 set KEYSTORE_ALIAS=config-server-key
 
 REM Additional environment variables
 set SPRING_PROFILES_ACTIVE=prod
-set ENCRYPT_KEY=expensora-config-key
+set ENCRYPT_KEY=your-encryption-key
 
 echo Starting Config Server with environment variables:
 echo KEYSTORE_LOCATION=%KEYSTORE_LOCATION%
