@@ -24,4 +24,8 @@ services:
         value: config-server-key
       - key: KEYSTORE_TEMP_PATH
         value: /tmp/server.jks
+      - key: SPRING_SECURITY_USER_NAME
+        value: admin
+      - key: SPRING_SECURITY_USER_PASSWORD
+        sync: false # Set this in Render dashboard as a secret
     healthCheckPath: /actuator/health
