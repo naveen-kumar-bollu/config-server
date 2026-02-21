@@ -32,7 +32,8 @@ RUN addgroup --system --gid 1001 spring && \
 
 # Copy entrypoint script and make it executable before switching user
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+# Strip CRLF in case the script was committed with Windows line endings
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
 # Switch to non-root user
 USER spring:spring
