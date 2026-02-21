@@ -4,7 +4,8 @@ set -e
 # Decode the base64-encoded keystore to a file if KEYSTORE_BASE64 is set
 if [ -n "$KEYSTORE_BASE64" ]; then
     KEYSTORE_TEMP_PATH="${KEYSTORE_TEMP_PATH:-/tmp/server.jks}"
-    echo "$KEYSTORE_BASE64" | base64 -d > "$KEYSTORE_TEMP_PATH"
+    # Strip any accidental whitespace/newlines before decoding
+    printf '%s' "$KEYSTORE_BASE64" | tr -d ' \n\r\t' | base64 -d > "$KEYSTORE_TEMP_PATH"
     export KEYSTORE_LOCATION="file:$KEYSTORE_TEMP_PATH"
     echo "Keystore decoded to $KEYSTORE_TEMP_PATH"
 else
