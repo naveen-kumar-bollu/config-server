@@ -30,6 +30,10 @@ RUN addgroup --system --gid 1001 spring && \
     mkdir -p /tmp && \
     chown -R spring:spring /tmp
 
+# Copy entrypoint script and make it executable before switching user
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Switch to non-root user
 USER spring:spring
 
@@ -43,12 +47,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
 # Expose port (Render will use PORT env variable)
 EXPOSE 8888
 
-# Run with optimized JVM settings for containers
-ENTRYPOINT ["java", \
-    "-XX:+UseContainerSupport", \
-    "-XX:MaxRAMPercentage=75.0", \
-    "-XX:+UseG1GC", \
-    "-XX:+UseStringDeduplication", \
-    "-Djava.security.egd=file:/dev/./urandom", \
-    "-jar", \
-    "app.jar"]
+# Entrypoint decodes KEYSTORE_BASE64 → file, then launches the JVM
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

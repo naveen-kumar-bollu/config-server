@@ -23,6 +23,8 @@ spring:
 encrypt:
   fail-on-error: false  # Don't fail if encryption is not available
   key-store:
+    # On Render: docker-entrypoint.sh decodes KEYSTORE_BASE64 and exports KEYSTORE_LOCATION=file:/tmp/server.jks
+    # Locally: set KEYSTORE_LOCATION=file:keystore/server.jks in your .env file
     location: ${KEYSTORE_LOCATION:}
     password: ${KEYSTORE_PASSWORD:}
     alias: ${KEYSTORE_ALIAS:config-server-key}
