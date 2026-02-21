@@ -8,6 +8,9 @@ on:
   push:
     branches:
       - main
+      - develop
+      - 'feature/**'
+      - 'fix/**'
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -61,4 +64,4 @@ jobs:
             -Dsonar.projectKey=naveen-kumar-bollu_config-server \
             -Dsonar.organization=naveen-kumar-bollu \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.token=${SONAR_TOKEN}
