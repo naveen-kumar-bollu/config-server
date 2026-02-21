@@ -64,4 +64,5 @@ jobs:
             -Dsonar.projectKey=naveen-kumar-bollu_config-server \
             -Dsonar.organization=naveen-kumar-bollu \
             -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.branch.name=master \
             -Dsonar.token=${SONAR_TOKEN}
